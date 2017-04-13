@@ -243,14 +243,14 @@ class Table extends Component {
 
     let tHead;
     let tFoot;
-    let tBody;
+    const tBodies = [];
 
     React.Children.forEach(children, (child) => {
       if (!React.isValidElement(child)) return;
 
       const {muiName} = child.type;
       if (muiName === 'TableBody') {
-        tBody = this.createTableBody(child);
+        tBodies.push(this.createTableBody(child));
       } else if (muiName === 'TableHeader') {
         tHead = this.createTableHeader(child);
       } else if (muiName === 'TableFooter') {
@@ -263,7 +263,7 @@ class Table extends Component {
     });
 
     // If we could not find a table-header and a table-body, do not attempt to display anything.
-    if (!tBody && !tHead) return null;
+    if (tBodies.length === 0 && !tHead) return null;
 
     const mergedTableStyle = Object.assign(styles.root, style);
     let headerTable;
@@ -304,7 +304,7 @@ class Table extends Component {
           <table className={className} style={mergedTableStyle} ref="tableBody">
             {inlineHeader}
             {inlineFooter}
-            {tBody}
+            {tBodies}
           </table>
         </div>
         {footerTable}
